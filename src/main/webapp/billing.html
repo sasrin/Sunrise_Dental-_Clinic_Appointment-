@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunrise Dental Clinic - Calculate Bill</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Calculate & Print Bill</h1>
+            <a href="dashboard.html" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
+        
+        <div class="search-container">
+            <form id="billingForm" class="search-form">
+                <div class="form-group">
+                    <label for="appointmentNumber">Appointment Number</label>
+                    <input type="text" id="appointmentNumber" name="appointmentNumber" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate Bill</button>
+            </form>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <div id="billingDetails" class="billing-details" style="display: none;">
+            <h2>Bill Summary</h2>
+            <div class="bill-info">
+                <div class="bill-row">
+                    <span class="bill-label">Appointment Number:</span>
+                    <span class="bill-value" id="billAppointmentNumber"></span>
+                </div>
+                <div class="bill-row">
+                    <span class="bill-label">Patient Name:</span>
+                    <span class="bill-value" id="billPatientName"></span>
+                </div>
+                <div class="bill-row">
+                    <span class="bill-label">Treatment Type:</span>
+                    <span class="bill-value" id="billTreatmentType"></span>
+                </div>
+                <div class="bill-row">
+                    <span class="bill-label">Date:</span>
+                    <span class="bill-value" id="billDate"></span>
+                </div>
+                <div class="bill-divider"></div>
+                <div class="bill-row">
+                    <span class="bill-label">Treatment Cost:</span>
+                    <span class="bill-value" id="billTreatmentCost"></span>
+                </div>
+                <div class="bill-row">
+                    <span class="bill-label">Consultation Fee:</span>
+                    <span class="bill-value" id="billConsultationFee"></span>
+                </div>
+                <div class="bill-divider"></div>
+                <div class="bill-row total-row">
+                    <span class="bill-label total-label">TOTAL:</span>
+                    <span class="bill-value total-value" id="billTotal"></span>
+                </div>
+            </div>
+            <button id="printBillBtn" class="btn btn-primary">Print Bill</button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('billingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const appointmentNumber = document.getElementById('appointmentNumber').value.trim();
+            const messageDiv = document.getElementById('message');
+            const detailsDiv = document.getElementById('billingDetails');
+            
+            if (!appointmentNumber) {
+                messageDiv.textContent = 'Please enter an appointment number';
+                messageDiv.className = 'message error';
+                detailsDiv.style.display = 'none';
+                return;
+            }
+            
+            messageDiv.textContent = 'Calculating bill...';
+            messageDiv.className = 'message info';
+            detailsDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch(`api/billing?appointmentNumber=${encodeURIComponent(appointmentNumber)}`);
+                const data = await response.json();
+                
+                if (data.success && data.billing) {
+                    const bill = data.billing;
+                    document.getElementById('billAppointmentNumber').textContent = bill.appointmentNumber;
+                    document.getElementById('billPatientName').textContent = bill.patientName;
+                    document.getElementById('billTreatmentType').textContent = bill.treatmentType;
+                    document.getElementById('billDate').textContent = bill.appointmentDate;
+                    document.getElementById('billTreatmentCost').textContent = 'LKR ' + bill.treatmentCost;
+                    document.getElementById('billConsultationFee').textContent = 'LKR ' + bill.consultationFee;
+                    document.getElementById('billTotal').textContent = 'LKR ' + bill.total;
+                    
+                    // Store billing data for receipt page
+                    sessionStorage.setItem('billingData', JSON.stringify(bill));
+                    
+                    messageDiv.textContent = '';
+                    detailsDiv.style.display = 'block';
+                } else {
+                    messageDiv.textContent = data.message || 'Appointment not found';
+                    messageDiv.className = 'message error';
+                    detailsDiv.style.display = 'none';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Error connecting to server';
+                messageDiv.className = 'message error';
+                detailsDiv.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('printBillBtn').addEventListener('click', function() {
+            window.location.href = 'receipt.html';
+        });
+    </script>
+</body>
+</html>

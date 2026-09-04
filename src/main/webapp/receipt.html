@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunrise Dental Clinic - Receipt</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="receipt">
+            <div class="receipt-header">
+                <h1>SUNRISE DENTAL CLINIC</h1>
+                <h2>COLOMBO</h2>
+            </div>
+            
+            <div class="receipt-divider"></div>
+            
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span class="receipt-label">Appointment Number:</span>
+                    <span class="receipt-value" id="receiptAppointmentNumber"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Patient Name:</span>
+                    <span class="receipt-value" id="receiptPatientName"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Treatment Type:</span>
+                    <span class="receipt-value" id="receiptTreatmentType"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Date:</span>
+                    <span class="receipt-value" id="receiptDate"></span>
+                </div>
+                
+                <div class="receipt-divider"></div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Treatment Cost:</span>
+                    <span class="receipt-value" id="receiptTreatmentCost"></span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Consultation Fee:</span>
+                    <span class="receipt-value" id="receiptConsultationFee"></span>
+                </div>
+                
+                <div class="receipt-divider"></div>
+                
+                <div class="receipt-row total-row">
+                    <span class="receipt-label total-label">TOTAL:</span>
+                    <span class="receipt-value total-value" id="receiptTotal"></span>
+                </div>
+            </div>
+            
+            <div class="receipt-divider"></div>
+            
+            <div class="receipt-footer">
+                <p>Thank you for visiting</p>
+                <p>Sunrise Dental Clinic</p>
+            </div>
+            
+            <div class="no-print">
+                <button id="printBtn" class="btn btn-primary">Print Bill</button>
+                <a href="billing.html" class="btn btn-secondary">← Back to Billing</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        window.addEventListener('load', function() {
+            const billingData = sessionStorage.getItem('billingData');
+            
+            if (billingData) {
+                const bill = JSON.parse(billingData);
+                document.getElementById('receiptAppointmentNumber').textContent = bill.appointmentNumber;
+                document.getElementById('receiptPatientName').textContent = bill.patientName;
+                document.getElementById('receiptTreatmentType').textContent = bill.treatmentType;
+                document.getElementById('receiptDate').textContent = bill.appointmentDate;
+                document.getElementById('receiptTreatmentCost').textContent = 'LKR ' + bill.treatmentCost;
+                document.getElementById('receiptConsultationFee').textContent = 'LKR ' + bill.consultationFee;
+                document.getElementById('receiptTotal').textContent = 'LKR ' + bill.total;
+            } else {
+                window.location.href = 'billing.html';
+            }
+        });
+        
+        document.getElementById('printBtn').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
+</body>
+</html>

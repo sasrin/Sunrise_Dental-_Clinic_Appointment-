@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunrise Dental Clinic - Search Appointment</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Search Appointment</h1>
+            <a href="dashboard.html" class="btn btn-secondary">← Back to Dashboard</a>
+        </div>
+        
+        <div class="search-container">
+            <form id="searchForm" class="search-form">
+                <div class="form-group">
+                    <label for="appointmentNumber">Appointment Number</label>
+                    <input type="text" id="appointmentNumber" name="appointmentNumber" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <div id="appointmentDetails" class="appointment-details" style="display: none;">
+            <h2>Appointment Details</h2>
+            <div class="detail-row">
+                <span class="detail-label">Appointment Number:</span>
+                <span class="detail-value" id="detailAppointmentNumber"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Patient Name:</span>
+                <span class="detail-value" id="detailPatientName"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Address:</span>
+                <span class="detail-value" id="detailAddress"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Contact Number:</span>
+                <span class="detail-value" id="detailContactNumber"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Dentist Name:</span>
+                <span class="detail-value" id="detailDentistName"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Treatment Type:</span>
+                <span class="detail-value" id="detailTreatmentType"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Appointment Date:</span>
+                <span class="detail-value" id="detailAppointmentDate"></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Appointment Time:</span>
+                <span class="detail-value" id="detailAppointmentTime"></span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const appointmentNumber = document.getElementById('appointmentNumber').value.trim();
+            const messageDiv = document.getElementById('message');
+            const detailsDiv = document.getElementById('appointmentDetails');
+            
+            if (!appointmentNumber) {
+                messageDiv.textContent = 'Please enter an appointment number';
+                messageDiv.className = 'message error';
+                detailsDiv.style.display = 'none';
+                return;
+            }
+            
+            messageDiv.textContent = 'Searching...';
+            messageDiv.className = 'message info';
+            detailsDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch(`api/search?appointmentNumber=${encodeURIComponent(appointmentNumber)}`);
+                const data = await response.json();
+                
+                if (data.success && data.appointment) {
+                    const apt = data.appointment;
+                    document.getElementById('detailAppointmentNumber').textContent = apt.appointmentNumber;
+                    document.getElementById('detailPatientName').textContent = apt.patientName;
+                    document.getElementById('detailAddress').textContent = apt.address;
+                    document.getElementById('detailContactNumber').textContent = apt.contactNumber;
+                    document.getElementById('detailDentistName').textContent = apt.dentistName;
+                    document.getElementById('detailTreatmentType').textContent = apt.treatmentType;
+                    document.getElementById('detailAppointmentDate').textContent = apt.appointmentDate;
+                    document.getElementById('detailAppointmentTime').textContent = apt.appointmentTime;
+                    
+                    messageDiv.textContent = '';
+                    detailsDiv.style.display = 'block';
+                } else {
+                    messageDiv.textContent = data.message || 'Appointment not found';
+                    messageDiv.className = 'message error';
+                    detailsDiv.style.display = 'none';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Error connecting to server';
+                messageDiv.className = 'message error';
+                detailsDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

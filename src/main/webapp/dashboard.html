@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunrise Dental Clinic - Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Sunrise Dental Clinic</h1>
+            <p class="welcome-message">Welcome to the Appointment Management System</p>
+        </div>
+        
+        <div class="navigation-menu">
+            <a href="appointment.html" class="nav-card">
+                <div class="nav-icon">📅</div>
+                <h2>Register New Appointment</h2>
+                <p>Create a new patient appointment</p>
+            </a>
+            
+            <a href="search.html" class="nav-card">
+                <div class="nav-icon">🔍</div>
+                <h2>Search Appointment</h2>
+                <p>Find and view appointment details</p>
+            </a>
+            
+            <a href="billing.html" class="nav-card">
+                <div class="nav-icon">💰</div>
+                <h2>Calculate & Print Bill</h2>
+                <p>Generate and print patient bills</p>
+            </a>
+            
+            <a href="help.html" class="nav-card">
+                <div class="nav-icon">❓</div>
+                <h2>Help</h2>
+                <p>Get help using the system</p>
+            </a>
+        </div>
+        
+        <div class="logout-section">
+            <button id="logoutBtn" class="btn btn-danger">Logout</button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            try {
+                const response = await fetch('api/logout', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = 'index.html';
+            }
+        });
+        
+        // Check authentication on page load
+        window.addEventListener('load', async function() {
+            try {
+                const response = await fetch('api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'check_session=true'
+                });
+                
+                if (response.status === 401) {
+                    window.location.href = 'index.html';
+                }
+            } catch (error) {
+                // If server is not responding, allow access for development
+                console.log('Session check failed, allowing access');
+            }
+        });
+    </script>
+</body>
+</html>
