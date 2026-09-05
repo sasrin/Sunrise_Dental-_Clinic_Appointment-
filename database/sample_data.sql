@@ -5,10 +5,10 @@
 USE dental_clinic;
 
 -- Insert sample user account
--- Username: staff
--- Password: Staff@123 (hashed using SHA-256 with salt)
+-- Username: sasrin
+-- Password: sasrin123 (hashed using SHA-256 with salt)
 INSERT INTO users (username, password_hash) VALUES
-('staff', 'TQkfL2+BuxVHx9aHtwPbLXSkANaVKGar+/tUuRf2SjpBQt7jwArNiL+CvnQ/M5e8');
+('sasrin', 'xXoIsx0qZ5V+lg50fUw5Rd97D2BMyljDc2oPP8h7uyUv7FpSbJw0PMzFMhaCpnSA');
 
 -- Insert sample appointments for testing
 INSERT INTO appointments (appointment_number, patient_name, address, contact_number, dentist_name, treatment_type, appointment_date, appointment_time) VALUES

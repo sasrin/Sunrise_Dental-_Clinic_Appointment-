@@ -96,8 +96,8 @@ http://localhost:8080/dental-appointment/
 
 For development and testing purposes, use the following credentials:
 
-- **Username**: `staff`
-- **Password**: `Staff@123`
+- **Username**: `sasrin`
+- **Password**: `sasrin123`
 
 **Important**: This is a development/test account only. Do not use in production.
 
