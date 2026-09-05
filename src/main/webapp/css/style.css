@@ -159,15 +159,12 @@ body {
 .test-account-info {
     margin-top: 30px;
     padding: 15px;
-    background: #fff3cd;
-    border: 1px solid #ffc107;
-    border-radius: 5px;
     font-size: 12px;
 }
 
 .test-account-info p {
     margin: 5px 0;
-    color: #856404;
+    color: #666;
 }
 
 /* Dashboard Styles */
