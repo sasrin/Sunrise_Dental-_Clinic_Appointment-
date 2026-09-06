@@ -36,6 +36,12 @@ body {
     margin-bottom: 30px;
 }
 
+.clinic-logo {
+    max-width: 120px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
 .clinic-header h1 {
     color: #667eea;
     font-size: 28px;
